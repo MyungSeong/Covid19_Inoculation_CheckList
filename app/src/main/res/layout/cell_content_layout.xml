@@ -2,10 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-<!--    android:visibility="gone">-->
+    android:orientation="vertical"
+    android:visibility="gone">
 
-    <!-- content body layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,12 +28,12 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="5dp"
-                android:text="@string/sender_badge" />
+                android:text="대상자" />
 
             <ImageView
                 android:id="@+id/content_avatar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:layout_below="@id/content_avatar_title"
                 android:scaleType="centerCrop"
                 android:src="@drawable/avatar" />
@@ -53,28 +52,6 @@
                 android:textColor="@color/mainTextColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/content_rating_stars"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/content_name_view"
-                android:layout_alignStart="@id/content_name_view"
-                android:layout_below="@id/content_name_view"
-                android:src="@drawable/stars" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/content_rating_stars"
-                android:layout_marginBottom="-2dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginStart="3dp"
-                android:layout_toEndOf="@id/content_rating_stars"
-                android:layout_toRightOf="@id/content_rating_stars"
-                android:text="@string/rating_mock"
-                android:textColor="@color/contentBadgeTitle"
-                android:textSize="12sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -107,36 +84,36 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/content_from_badge"
+                    android:id="@+id/content_reservationDate_badge"
                     style="@style/ContentMainBadgeTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:text="@string/from_badge" />
+                    android:text="접종 예약일" />
 
                 <TextView
-                    android:id="@+id/content_from_address_1"
+                    android:id="@+id/content_reservationDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/content_from_badge"
-                    android:layout_alignStart="@id/content_from_badge"
-                    android:layout_below="@id/content_from_badge"
+                    android:layout_alignLeft="@id/content_reservationDate_badge"
+                    android:layout_alignStart="@id/content_reservationDate_badge"
+                    android:layout_below="@id/content_reservationDate_badge"
                     android:text="@string/content_from1_mock"
                     android:textColor="@color/mainTextColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/content_from_address_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/content_from_address_1"
-                    android:layout_alignStart="@id/content_from_address_1"
-                    android:layout_below="@id/content_from_address_1"
-                    android:text="@string/content_from2_mock"
-                    android:textColor="@color/mainTextColor"
-                    android:textSize="14sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/content_from_address_2"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignLeft="@id/content_reservationDate"-->
+<!--                    android:layout_alignStart="@id/content_reservationDate"-->
+<!--                    android:layout_below="@id/content_reservationDate"-->
+<!--                    android:text="@string/content_from2_mock"-->
+<!--                    android:textColor="@color/mainTextColor"-->
+<!--                    android:textSize="14sp" />-->
 
             </RelativeLayout>
 
@@ -146,36 +123,36 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/content_to_badge"
+                    android:id="@+id/content_reservationTime_badge"
                     style="@style/ContentMainBadgeTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:text="@string/to_badge" />
+                    android:text="예약 시간" />
 
                 <TextView
-                    android:id="@+id/content_to_address_1"
+                    android:id="@+id/content_reservationTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/content_to_badge"
-                    android:layout_alignStart="@id/content_to_badge"
-                    android:layout_below="@id/content_to_badge"
+                    android:layout_alignLeft="@id/content_reservationTime_badge"
+                    android:layout_alignStart="@id/content_reservationTime_badge"
+                    android:layout_below="@id/content_reservationTime_badge"
                     android:text="@string/content_to1_mock"
                     android:textColor="@color/mainTextColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/content_to_address_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/content_to_address_1"
-                    android:layout_alignStart="@id/content_to_address_1"
-                    android:layout_below="@id/content_to_address_1"
-                    android:text="@string/content_to2_mock"
-                    android:textColor="@color/mainTextColor"
-                    android:textSize="14sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/content_to_address_2"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignLeft="@id/content_reservationTime"-->
+<!--                    android:layout_alignStart="@id/content_reservationTime"-->
+<!--                    android:layout_below="@id/content_reservationTime"-->
+<!--                    android:text="@string/content_to2_mock"-->
+<!--                    android:textColor="@color/mainTextColor"-->
+<!--                    android:textSize="14sp" />-->
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -210,36 +187,36 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/content_delivery_date_badge"
+                    android:id="@+id/content_inoculated_badge"
                     style="@style/ContentMainBadgeTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:text="@string/delivery_date_badge" />
+                    android:text="접종 완료" />
 
                 <TextView
-                    android:id="@+id/content_delivery_time"
+                    android:id="@+id/content_inoculated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/content_delivery_date_badge"
-                    android:layout_alignStart="@id/content_delivery_date_badge"
-                    android:layout_below="@id/content_delivery_date_badge"
+                    android:layout_alignLeft="@id/content_inoculated_badge"
+                    android:layout_alignStart="@id/content_inoculated_badge"
+                    android:layout_below="@id/content_inoculated_badge"
                     android:text="@string/delivery_time_mock"
                     android:textColor="@color/mainTextColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/content_delivery_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/content_delivery_time"
-                    android:layout_alignStart="@id/content_delivery_time"
-                    android:layout_below="@id/content_delivery_time"
-                    android:text="@string/delivery_date_mock"
-                    android:textColor="@color/mainTextColor"
-                    android:textSize="14sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/content_delivery_date"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignLeft="@id/content_inoculated"-->
+<!--                    android:layout_alignStart="@id/content_inoculated"-->
+<!--                    android:layout_below="@id/content_inoculated"-->
+<!--                    android:text="@string/delivery_date_mock"-->
+<!--                    android:textColor="@color/mainTextColor"-->
+<!--                    android:textSize="14sp" />-->
 
             </RelativeLayout>
 
@@ -249,36 +226,186 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/content_deadline_badge"
+                    android:id="@+id/content_subject_badge"
                     style="@style/ContentMainBadgeTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:text="@string/deadline_badge" />
+                    android:text="대상자 구분" />
 
                 <TextView
-                    android:id="@+id/content_deadline_time"
+                    android:id="@+id/content_subject"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/content_deadline_badge"
-                    android:layout_alignStart="@id/content_deadline_badge"
-                    android:layout_below="@id/content_deadline_badge"
+                    android:layout_alignLeft="@id/content_subject_badge"
+                    android:layout_alignStart="@id/content_subject_badge"
+                    android:layout_below="@id/content_subject_badge"
                     android:text="@string/deadline_time_mock"
                     android:textColor="@color/mainTextColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
+<!--                <TextView-->
+<!--                    android:id="@+id/content_deadline_date"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignLeft="@id/content_subject"-->
+<!--                    android:layout_alignStart="@id/content_subject"-->
+<!--                    android:layout_below="@id/content_subject"-->
+<!--                    android:text="Date"-->
+<!--                    android:textColor="@color/mainTextColor"-->
+<!--                    android:textSize="14sp" />-->
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <!-- divider line -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="7dp"
+            android:src="@color/contentDividerLine" />
+
+        <!-- data -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
                 <TextView
-                    android:id="@+id/content_deadline_date"
+                    android:id="@+id/content_reservationNumber_badge"
+                    style="@style/ContentMainBadgeTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/content_deadline_time"
-                    android:layout_alignStart="@id/content_deadline_time"
-                    android:layout_below="@id/content_deadline_time"
-                    android:text=""
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:text="주민등록번호" />
+
+                <TextView
+                    android:id="@+id/content_reservationNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/content_reservationNumber_badge"
+                    android:layout_alignStart="@id/content_reservationNumber_badge"
+                    android:layout_below="@id/content_reservationNumber_badge"
+                    android:text="@string/delivery_time_mock"
                     android:textColor="@color/mainTextColor"
-                    android:textSize="14sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!--                <TextView-->
+                <!--                    android:id="@+id/content_delivery_date"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_alignLeft="@id/content_inoculated"-->
+                <!--                    android:layout_alignStart="@id/content_inoculated"-->
+                <!--                    android:layout_below="@id/content_inoculated"-->
+                <!--                    android:text="@string/delivery_date_mock"-->
+                <!--                    android:textColor="@color/mainTextColor"-->
+                <!--                    android:textSize="14sp" />-->
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/content_phoneNumber_badge"
+                    style="@style/ContentMainBadgeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:text="전화번호" />
+
+                <TextView
+                    android:id="@+id/content_phoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/content_phoneNumber_badge"
+                    android:layout_alignStart="@id/content_phoneNumber_badge"
+                    android:layout_below="@id/content_phoneNumber_badge"
+                    android:text="@string/deadline_time_mock"
+                    android:textColor="@color/mainTextColor"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!--                <TextView-->
+                <!--                    android:id="@+id/content_deadline_date"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_alignLeft="@id/content_subject"-->
+                <!--                    android:layout_alignStart="@id/content_subject"-->
+                <!--                    android:layout_below="@id/content_subject"-->
+                <!--                    android:text="Date"-->
+                <!--                    android:textColor="@color/mainTextColor"-->
+                <!--                    android:textSize="14sp" />-->
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <!-- divider line -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="7dp"
+            android:src="@color/contentDividerLine" />
+
+        <!-- data -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/content_facilityName_badge"
+                    style="@style/ContentMainBadgeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:text="노인시설명" />
+
+                <TextView
+                    android:id="@+id/content_facilityName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/content_facilityName_badge"
+                    android:layout_alignStart="@id/content_facilityName_badge"
+                    android:layout_below="@id/content_facilityName_badge"
+                    android:text="@string/delivery_time_mock"
+                    android:textColor="@color/mainTextColor"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!--                <TextView-->
+                <!--                    android:id="@+id/content_delivery_date"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_alignLeft="@id/content_inoculated"-->
+                <!--                    android:layout_alignStart="@id/content_inoculated"-->
+                <!--                    android:layout_below="@id/content_inoculated"-->
+                <!--                    android:text="@string/delivery_date_mock"-->
+                <!--                    android:textColor="@color/mainTextColor"-->
+                <!--                    android:textSize="14sp" />-->
+
             </RelativeLayout>
 
         </LinearLayout>

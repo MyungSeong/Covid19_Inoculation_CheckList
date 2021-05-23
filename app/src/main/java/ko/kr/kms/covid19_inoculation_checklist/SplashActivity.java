@@ -7,7 +7,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 
@@ -18,7 +17,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_splash);
 
         lottieAnimationView = findViewById(R.id.animation_view);
 
@@ -39,12 +38,13 @@ public class SplashActivity extends AppCompatActivity {
     private void startAnimation() {
         ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
 
-        animator.addUpdateListener(animation -> lottieAnimationView.setProgress((Float) animation.getAnimatedValue()));
+        animator.addUpdateListener((ValueAnimator animation) -> {
+            lottieAnimationView.setProgress((Float) animation.getAnimatedValue());
+        });
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                Toast.makeText(getApplicationContext(), "Text", Toast.LENGTH_SHORT).show();
             }
         });
 

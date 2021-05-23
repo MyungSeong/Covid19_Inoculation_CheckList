@@ -4,7 +4,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class Item {
 
     /**
@@ -14,7 +13,7 @@ public class Item {
      * subject: 대상자 구분
      * name: 성명
      * reservationNumber: 주민등록번호
-     * phoneNumber: 주민번호
+     * phoneNumber: 전화번호
      * facilityName: 노인시설명
      */
 
@@ -154,7 +153,7 @@ public class Item {
     public static ArrayList<Item> getTestingList() {
         ArrayList<Item> items = new ArrayList<>();
         items.add(new Item("2021-05-23", "오전 10시", "1차", "노인시설", "홍길동", "960504-1******", "010-1234-5678", "실버타운"));
-        items.add(new Item("2021-05-23", "오후 1시", "1차", "노인시설", "김첨지", "970813-2******", "010-2345-6789", "요양원"));
+        items.add(new Item("2021-05-24", "오후 1시", "1차", "노인시설", "김첨지", "970813-2******", "010-2345-6789", "요양원"));
 
         return items;
     }

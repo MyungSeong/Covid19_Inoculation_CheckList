@@ -36,6 +36,15 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             LayoutInflater vi = LayoutInflater.from(getContext());
             cell = (FoldingCell) vi.inflate(R.layout.cell, parent, false);
             // binding view parts to view holder
+            viewHolder.name = cell.findViewById(R.id.content_name_view);
+            viewHolder.reservationDate = cell.findViewById(R.id.content_reservationDate);
+            viewHolder.reservationTime = cell.findViewById(R.id.content_reservationTime);
+            viewHolder.inoculated = cell.findViewById(R.id.content_inoculated);
+            viewHolder.subject = cell.findViewById(R.id.content_subject);
+            viewHolder.registrationNumber = cell.findViewById(R.id.content_reservationNumber);
+            viewHolder.phoneNumber = cell.findViewById(R.id.content_phoneNumber);
+            viewHolder.facilityName = cell.findViewById(R.id.content_facilityName);
+
             viewHolder.price = cell.findViewById(R.id.title_price);
             /*viewHolder.time = cell.findViewById(R.id.title_time_label);
             viewHolder.date = cell.findViewById(R.id.title_date_label);
@@ -59,6 +68,15 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             return cell;
 
         // bind data from selected element to view through view holder
+        viewHolder.name.setText(item.getName());
+        viewHolder.reservationDate.setText(item.getReservationDate());
+        viewHolder.reservationTime.setText(item.getReservationTime());
+        viewHolder.inoculated.setText(item.getInoculated());
+        viewHolder.subject.setText(item.getSubject());
+        viewHolder.registrationNumber.setText(item.getRegistrationNumber());
+        viewHolder.phoneNumber.setText(item.getPhoneNumber());
+        viewHolder.facilityName.setText(item.getFacilityName());
+
         viewHolder.price.setText(item.getReservationDate());
         /*viewHolder.time.setText(item.getTime());
         viewHolder.date.setText(item.getDate());
@@ -112,5 +130,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         TextView requestsCount;
         TextView date;
         TextView time;
+
+        TextView reservationDate;
+        TextView reservationTime;
+        TextView inoculated;
+        TextView subject;
+        TextView name;
+        TextView registrationNumber;
+        TextView phoneNumber;
+        TextView facilityName;
     }
 }

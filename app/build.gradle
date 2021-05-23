@@ -29,5 +29,5 @@ dependencies {
 
     implementation 'com.airbnb.android:lottie:3.7.0'
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
-    implementation 'ko.kr.kms.covid19_inoculation_checklist:boommenu-2.1.1@aar'
+    implementation project(':library')
 }

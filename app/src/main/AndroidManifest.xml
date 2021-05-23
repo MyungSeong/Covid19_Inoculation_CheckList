@@ -11,7 +11,6 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <activity android:name="ko.kr.kms.covid19_inoculation_checklist.CheckListViewActivity" />
-        <activity android:name="ko.kr.kms.covid19_inoculation_checklist.BoomMenuButton" />
         <activity android:name="ko.kr.kms.covid19_inoculation_checklist.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
