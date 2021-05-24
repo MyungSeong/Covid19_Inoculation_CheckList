@@ -1,7 +1,17 @@
 package ko.kr.kms.covid19_inoculation_checklist;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
+import android.util.Log;
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -21,6 +31,9 @@ import com.ramotion.foldingcell.FoldingCell;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
+import java.io.*;
+import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -30,21 +43,24 @@ import ko.kr.kms.covid19_inoculation_checklist.menu.DrawerAdapter;
 import ko.kr.kms.covid19_inoculation_checklist.menu.DrawerItem;
 import ko.kr.kms.covid19_inoculation_checklist.menu.SimpleItem;
 import ko.kr.kms.covid19_inoculation_checklist.menu.SpaceItem;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class CheckListViewActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
 
     private long pressedTime;
 
-    private static final int POS_DASHBOARD = 0;
-    private static final int POS_ACCOUNT = 1;
-    private static final int POS_MESSAGES = 2;
-    private static final int POS_CART = 3;
-    private static final int POS_LOGOUT = 5;
+    private static final int POS_UNCONFIRMEDLIST = 0;
+    private static final int POS_CONFIRMEDLIST = 1;
+    private static final int POS_IMPORT = 3;
 
     private String[] screenTitles;
     private Drawable[] screenIcons;
 
     private SlidingRootNav slidingRootNav;
+    private DrawerAdapter slidingRootDrawerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,13 +124,11 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         screenIcons = loadScreenIcons();
         screenTitles = loadScreenTitles();
 
-        DrawerAdapter slidingRootDrawerAdapter = new DrawerAdapter(Arrays.asList(
-                createItemFor(POS_DASHBOARD).setChecked(true),
-                createItemFor(POS_ACCOUNT),
-                createItemFor(POS_MESSAGES),
-                createItemFor(POS_CART),
+        slidingRootDrawerAdapter = new DrawerAdapter(Arrays.asList(
+                createItemFor(POS_UNCONFIRMEDLIST).setChecked(true),
+                createItemFor(POS_CONFIRMEDLIST),
                 new SpaceItem(48),
-                createItemFor(POS_LOGOUT)));
+                createItemFor(POS_IMPORT)));
         slidingRootDrawerAdapter.setListener(this);
 
         RecyclerView list = findViewById(R.id.list);
@@ -122,17 +136,65 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(slidingRootDrawerAdapter);
 
-        slidingRootDrawerAdapter.setSelected(POS_DASHBOARD);
+        slidingRootDrawerAdapter.setSelected(POS_UNCONFIRMEDLIST);
     }
 
     @Override
     public void onItemSelected(int position) {
-        if (position == POS_LOGOUT) {
-            finish();
+        switch (position) {
+            case POS_UNCONFIRMEDLIST:
+                break;
+
+            case POS_CONFIRMEDLIST:
+                break;
+
+            case POS_IMPORT:
+                Util.verifyStoragePermissions(this);
+
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                startActivityForResult(Intent.createChooser(intent, "Open Excel File"), 1);
+                break;
+
+            default:
+                break;
         }
+
         slidingRootNav.closeMenu();
         Fragment selectedScreen = CenteredTextFragment.createFor(screenTitles[position]);
         showFragment(selectedScreen);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case 1:
+                    if (data != null) {
+                        getCheckList(data.getData());
+                    } else {
+                        Toast.makeText(this, "파일 읽기에 실패했습니다", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+
+                default:
+                    Toast.makeText(this, "파일 읽기에 실패했습니다", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+
+        slidingRootDrawerAdapter.setSelected(POS_UNCONFIRMEDLIST);
+    }
+
+    public void getCheckList(Uri pathUri) {
+        try {
+            Log.d(":: DEBUG", readExcel(pathUri).toArray()[0].toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "리스트 불러오기에 실패했습니다", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showFragment(Fragment fragment) {
@@ -144,7 +206,9 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
     @SuppressWarnings("rawtypes")
     private DrawerItem createItemFor(int position) {
         return new SimpleItem(screenIcons[position], screenTitles[position])
-                .withIconTint(color(R.color.textColorSecondary))
+                .withMaxHeight(96)
+                .withMaxWidth(96)
+                .withIconTint(color(R.color.black_overlay))
                 .withTextTint(color(R.color.textColorPrimary))
                 .withSelectedIconTint(color(R.color.colorAccent))
                 .withSelectedTextTint(color(R.color.colorAccent));
@@ -170,6 +234,45 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
     @ColorInt
     private int color(@ColorRes int res) {
         return ContextCompat.getColor(this, res);
+    }
+
+    public ArrayList<Item> readExcel(Uri listUri) {
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
+
+        ArrayList<Item> list = new ArrayList<Item>();
+
+        try {
+            File file = Util.getImageFile(this, listUri);
+
+            FileInputStream fileInputStream = new FileInputStream(file);
+            XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+
+            int rowIndex = 0;
+            int colIndex = 0;
+
+            // 시트 수
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            // 행의 수
+            int rows = sheet.getPhysicalNumberOfRows();
+            for (rowIndex = 2; rowIndex < rows; rowIndex++) {
+                // 행 읽기
+                XSSFRow row = sheet.getRow(rowIndex);
+                XSSFCell cell = row.getCell(2);
+
+                Item item = Item.getInstance();
+
+                item.setName(cell.getStringCellValue());
+                Log.d(":: Data", item.toString());
+
+                list.add(item);
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
     @Override

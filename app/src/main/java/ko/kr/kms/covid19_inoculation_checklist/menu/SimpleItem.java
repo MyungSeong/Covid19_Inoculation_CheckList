@@ -11,6 +11,9 @@ import ko.kr.kms.covid19_inoculation_checklist.R;
 
 public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder> {
 
+    private int maxHeight;
+    private int maxWidth;
+
     private int selectedItemIconTint;
     private int selectedItemTextTint;
 
@@ -37,8 +40,21 @@ public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder> {
         holder.title.setText(title);
         holder.icon.setImageDrawable(icon);
 
+        holder.icon.getLayoutParams().height = maxHeight;
+        holder.icon.getLayoutParams().width = maxWidth;
+
         holder.title.setTextColor(isChecked ? selectedItemTextTint : normalItemTextTint);
         holder.icon.setColorFilter(isChecked ? selectedItemIconTint : normalItemIconTint);
+    }
+
+    public SimpleItem withMaxHeight(int maxHeight) {
+        this.maxHeight = maxHeight;
+        return this;
+    }
+
+    public SimpleItem withMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+        return this;
     }
 
     public SimpleItem withSelectedIconTint(int selectedItemIconTint) {

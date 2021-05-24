@@ -38,8 +38,11 @@ public class SplashActivity extends AppCompatActivity {
     private void startAnimation() {
         ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
 
-        animator.addUpdateListener((ValueAnimator animation) -> {
-            lottieAnimationView.setProgress((Float) animation.getAnimatedValue());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                lottieAnimationView.setProgress((Float) animation.getAnimatedValue());
+            }
         });
         animator.addListener(new AnimatorListenerAdapter() {
             @Override

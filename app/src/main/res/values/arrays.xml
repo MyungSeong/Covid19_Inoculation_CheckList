@@ -2,21 +2,17 @@
 <resources>
 
     <string-array name="ld_activityScreenTitles">
-        <item>Dashboard</item>
-        <item>My Account</item>
-        <item>Messages</item>
-        <item>Cart</item>
+        <item>미확인 내역</item>
+        <item>확인 내역</item>
         <item />
-        <item>Log Out</item>
+        <item>리스트 불러오기</item>
     </string-array>
 
     <array name="ld_activityScreenIcons">
-        <item>@drawable/ic_home_outline_grey600_24dp</item>
-        <item>@drawable/ic_account_outline_grey600_24dp</item>
-        <item>@drawable/ic_email_outline_grey600_24dp</item>
-        <item>@drawable/ic_cart_outline_grey600_24dp</item>
+        <item>@drawable/ic_clipboard_list_96px</item>
+        <item>@drawable/ic_clipboard_approve_96px</item>
         <item>0</item>
-        <item>@drawable/ic_logout_grey600_24dp</item>
+        <item>@drawable/ic_xls_import_96px</item>
     </array>
 
 </resources>

@@ -5,6 +5,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 public class Item {
+    private static Item Instance;
 
     /**
      * reservationDate: 2차접종 예약일
@@ -41,6 +42,14 @@ public class Item {
         this.registrationNumber = registrationNumber;
         this.phoneNumber = phoneNumber;
         this.facilityName = facilityName;
+    }
+
+    public static Item getInstance() {
+        if (Instance == null) {
+            Instance = new Item();
+        }
+
+        return Instance;
     }
 
     public String getReservationDate() {
