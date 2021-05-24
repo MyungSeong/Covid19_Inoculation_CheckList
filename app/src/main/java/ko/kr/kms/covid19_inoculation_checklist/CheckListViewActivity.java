@@ -31,9 +31,9 @@ import com.ramotion.foldingcell.FoldingCell;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
-import java.io.*;
-import java.net.URI;
-import java.net.URLEncoder;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -52,8 +52,8 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
 
     private long pressedTime;
 
-    private static final int POS_UNCONFIRMEDLIST = 0;
-    private static final int POS_CONFIRMEDLIST = 1;
+    private static final int POS_UNCONFIRMED_LIST = 0;
+    private static final int POS_CONFIRMED_LIST = 1;
     private static final int POS_IMPORT = 3;
 
     private String[] screenTitles;
@@ -125,8 +125,8 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         screenTitles = loadScreenTitles();
 
         slidingRootDrawerAdapter = new DrawerAdapter(Arrays.asList(
-                createItemFor(POS_UNCONFIRMEDLIST).setChecked(true),
-                createItemFor(POS_CONFIRMEDLIST),
+                createItemFor(POS_UNCONFIRMED_LIST).setChecked(true),
+                createItemFor(POS_CONFIRMED_LIST),
                 new SpaceItem(48),
                 createItemFor(POS_IMPORT)));
         slidingRootDrawerAdapter.setListener(this);
@@ -136,16 +136,16 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(slidingRootDrawerAdapter);
 
-        slidingRootDrawerAdapter.setSelected(POS_UNCONFIRMEDLIST);
+        slidingRootDrawerAdapter.setSelected(POS_UNCONFIRMED_LIST);
     }
 
     @Override
     public void onItemSelected(int position) {
         switch (position) {
-            case POS_UNCONFIRMEDLIST:
+            case POS_UNCONFIRMED_LIST:
                 break;
 
-            case POS_CONFIRMEDLIST:
+            case POS_CONFIRMED_LIST:
                 break;
 
             case POS_IMPORT:
@@ -185,12 +185,12 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
             }
         }
 
-        slidingRootDrawerAdapter.setSelected(POS_UNCONFIRMEDLIST);
+        slidingRootDrawerAdapter.setSelected(POS_UNCONFIRMED_LIST);
     }
 
     public void getCheckList(Uri pathUri) {
         try {
-            Log.d(":: DEBUG", readExcel(pathUri).toArray()[0].toString());
+            Log.d(":: DEBUG", readExcel(pathUri).get(0).getName());
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "리스트 불러오기에 실패했습니다", Toast.LENGTH_SHORT).show();
@@ -250,13 +250,13 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
 
             int rowIndex = 0;
-            int colIndex = 0;
+            int colIndex = 2;
 
             // 시트 수
             XSSFSheet sheet = workbook.getSheetAt(0);
             // 행의 수
             int rows = sheet.getPhysicalNumberOfRows();
-            for (rowIndex = 2; rowIndex < rows; rowIndex++) {
+            for (rowIndex = 0; rowIndex < rows; rowIndex++) {
                 // 행 읽기
                 XSSFRow row = sheet.getRow(rowIndex);
                 XSSFCell cell = row.getCell(2);

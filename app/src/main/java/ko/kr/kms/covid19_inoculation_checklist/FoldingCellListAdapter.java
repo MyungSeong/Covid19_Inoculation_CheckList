@@ -42,11 +42,11 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             viewHolder.title_registrationNumber = cell.findViewById(R.id.title_registrationNumber);
             viewHolder.title_facilityName = cell.findViewById(R.id.title_facilityName);
 
-            viewHolder.name = cell.findViewById(R.id.content_name_view);
             viewHolder.reservationDate = cell.findViewById(R.id.content_reservationDate);
             viewHolder.reservationTime = cell.findViewById(R.id.content_reservationTime);
             viewHolder.inoculated = cell.findViewById(R.id.content_inoculated);
             viewHolder.subject = cell.findViewById(R.id.content_subject);
+            viewHolder.name = cell.findViewById(R.id.content_name_view);
             viewHolder.registrationNumber = cell.findViewById(R.id.content_reservationNumber);
             viewHolder.phoneNumber = cell.findViewById(R.id.content_phoneNumber);
             viewHolder.facilityName = cell.findViewById(R.id.content_facilityName);
@@ -73,11 +73,11 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         viewHolder.title_registrationNumber.setText(item.getRegistrationNumber());
         viewHolder.title_facilityName.setText(item.getFacilityName());
 
-        viewHolder.name.setText(item.getName());
         viewHolder.reservationDate.setText(item.getReservationDate());
         viewHolder.reservationTime.setText(item.getReservationTime());
         viewHolder.inoculated.setText(item.getInoculated());
         viewHolder.subject.setText(item.getSubject());
+        viewHolder.name.setText(item.getName());
         viewHolder.registrationNumber.setText(item.getRegistrationNumber());
         viewHolder.phoneNumber.setText(item.getPhoneNumber());
         viewHolder.facilityName.setText(item.getFacilityName());
