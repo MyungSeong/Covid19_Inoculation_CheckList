@@ -15,7 +15,6 @@
         android:paddingRight="20dp"
         android:paddingTop="9dp">
 
-        <!-- avatar and name part -->
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
@@ -48,7 +47,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_toEndOf="@id/content_avatar"
                 android:layout_toRightOf="@id/content_avatar"
-                android:text="@string/client_name_mock"
+                android:text="이름"
                 android:textColor="@color/mainTextColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -99,7 +98,7 @@
                     android:layout_alignLeft="@id/content_reservationDate_badge"
                     android:layout_alignStart="@id/content_reservationDate_badge"
                     android:layout_below="@id/content_reservationDate_badge"
-                    android:text="@string/content_from1_mock"
+                    android:text="1990-01-01"
                     android:textColor="@color/mainTextColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -138,7 +137,7 @@
                     android:layout_alignLeft="@id/content_reservationTime_badge"
                     android:layout_alignStart="@id/content_reservationTime_badge"
                     android:layout_below="@id/content_reservationTime_badge"
-                    android:text="@string/content_to1_mock"
+                    android:text="오전 10시"
                     android:textColor="@color/mainTextColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -202,7 +201,7 @@
                     android:layout_alignLeft="@id/content_inoculated_badge"
                     android:layout_alignStart="@id/content_inoculated_badge"
                     android:layout_below="@id/content_inoculated_badge"
-                    android:text="@string/delivery_time_mock"
+                    android:text="1차"
                     android:textColor="@color/mainTextColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -241,7 +240,7 @@
                     android:layout_alignLeft="@id/content_subject_badge"
                     android:layout_alignStart="@id/content_subject_badge"
                     android:layout_below="@id/content_subject_badge"
-                    android:text="@string/deadline_time_mock"
+                    android:text="노인시설"
                     android:textColor="@color/mainTextColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -296,7 +295,7 @@
                     android:layout_alignLeft="@id/content_reservationNumber_badge"
                     android:layout_alignStart="@id/content_reservationNumber_badge"
                     android:layout_below="@id/content_reservationNumber_badge"
-                    android:text="@string/delivery_time_mock"
+                    android:text="000000-1XXXXXX"
                     android:textColor="@color/mainTextColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -335,7 +334,7 @@
                     android:layout_alignLeft="@id/content_phoneNumber_badge"
                     android:layout_alignStart="@id/content_phoneNumber_badge"
                     android:layout_below="@id/content_phoneNumber_badge"
-                    android:text="@string/deadline_time_mock"
+                    android:text="010-1234-5678"
                     android:textColor="@color/mainTextColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -390,7 +389,7 @@
                     android:layout_alignLeft="@id/content_facilityName_badge"
                     android:layout_alignStart="@id/content_facilityName_badge"
                     android:layout_below="@id/content_facilityName_badge"
-                    android:text="@string/delivery_time_mock"
+                    android:text="요양원"
                     android:textColor="@color/mainTextColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -416,9 +415,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="@color/btnRequest"
+            android:background="@color/btnConfirm"
             android:padding="10dp"
-            android:text="@string/confirm_btn_text"
+            android:text="@string/btn_text"
             android:textAlignment="center"
             android:textColor="@color/mainTextColor"
             android:textSize="20sp" />

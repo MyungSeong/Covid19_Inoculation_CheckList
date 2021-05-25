@@ -13,7 +13,8 @@
     <color name="titleBadgeTitle">#adafb1</color>
     <color name="titleBadgeText">#adafb1</color>
     <color name="mainTextColor">#343d43</color>
-    <color name="btnRequest">#ffbf12</color>
+    <color name="btnConfirm">#ffbf12</color>
+    <color name="btnDelete">#FF1212</color>
 
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#757575</color>

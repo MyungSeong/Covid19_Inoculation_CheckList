@@ -1,6 +1,5 @@
 package ko.kr.kms.covid19_inoculation_checklist;
 
-import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -17,6 +16,8 @@ public class Item {
      * phoneNumber: 전화번호
      * facilityName: 노인시설명
      */
+
+    private int selectedMenuID;
 
     private String reservationDate;
     private String reservationTime; // = new SimpleDateFormat("yyyy-MM-dd a HH", Locale.KOREA);
@@ -50,6 +51,12 @@ public class Item {
 
     public static Item getInstance() {
         return LazyHolder.instance;
+    }
+
+    public int getSelectedMenuID() { return selectedMenuID; }
+
+    public void setSelectedMenuID(int selectedMenuID) {
+        this.selectedMenuID = selectedMenuID;
     }
 
     public String getReservationDate() {

@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import ko.kr.kms.covid19_inoculation_checklist.R;
 
-public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder> {
+public class MenuItem extends DrawerItem<MenuItem.ViewHolder> {
 
     private int maxHeight;
     private int maxWidth;
@@ -23,7 +23,7 @@ public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder> {
     private Drawable icon;
     private String title;
 
-    public SimpleItem(Drawable icon, String title) {
+    public MenuItem(Drawable icon, String title) {
         this.icon = icon;
         this.title = title;
     }
@@ -47,32 +47,32 @@ public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder> {
         holder.icon.setColorFilter(isChecked ? selectedItemIconTint : normalItemIconTint);
     }
 
-    public SimpleItem withMaxHeight(int maxHeight) {
+    public MenuItem withMaxHeight(int maxHeight) {
         this.maxHeight = maxHeight;
         return this;
     }
 
-    public SimpleItem withMaxWidth(int maxWidth) {
+    public MenuItem withMaxWidth(int maxWidth) {
         this.maxWidth = maxWidth;
         return this;
     }
 
-    public SimpleItem withSelectedIconTint(int selectedItemIconTint) {
+    public MenuItem withSelectedIconTint(int selectedItemIconTint) {
         this.selectedItemIconTint = selectedItemIconTint;
         return this;
     }
 
-    public SimpleItem withSelectedTextTint(int selectedItemTextTint) {
+    public MenuItem withSelectedTextTint(int selectedItemTextTint) {
         this.selectedItemTextTint = selectedItemTextTint;
         return this;
     }
 
-    public SimpleItem withIconTint(int normalItemIconTint) {
+    public MenuItem withIconTint(int normalItemIconTint) {
         this.normalItemIconTint = normalItemIconTint;
         return this;
     }
 
-    public SimpleItem withTextTint(int normalItemTextTint) {
+    public MenuItem withTextTint(int normalItemTextTint) {
         this.normalItemTextTint = normalItemTextTint;
         return this;
     }

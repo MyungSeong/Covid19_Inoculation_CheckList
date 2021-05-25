@@ -5,12 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.ramotion.foldingcell.FoldingCell;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -18,8 +21,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
     private HashSet<Integer> unfoldedIndexes = new HashSet<>();
     private View.OnClickListener defaultBtnClickListener;
 
+    private ArrayList<Item> itemList;
+    private ArrayList<Item> itemListAll;
+
     public FoldingCellListAdapter(Context context, List<Item> objects) {
         super(context, 0, objects);
+
+        itemList = (ArrayList<Item>) objects;
+        itemListAll = new ArrayList<>(objects);
     }
 
     @NonNull
@@ -85,6 +94,15 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         // set custom btn handler for list item from that item
         if (item.getBtnClickListener() != null) {
             viewHolder.contentBtn.setOnClickListener(item.getBtnClickListener());
+
+            if (Item.getInstance().getSelectedMenuID() == CheckListViewActivity.POS_UNCONFIRMED_LIST) {
+                viewHolder.contentBtn.setBackgroundColor(parent.getResources().getColor(R.color.btnConfirm, null));
+                viewHolder.contentBtn.setText("확인");
+            } else {
+                viewHolder.contentBtn.setBackgroundColor(parent.getResources().getColor(R.color.btnDelete, null));
+                viewHolder.contentBtn.setText("삭제");
+                viewHolder.contentBtn.setTextColor(parent.getResources().getColor(R.color.bgContent, null));
+            }
         } else {
             // (optionally) add "default" handler if no handler found in item
             viewHolder.contentBtn.setOnClickListener(defaultBtnClickListener);
@@ -116,6 +134,43 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
     public void setDefaultBtnClickListener(View.OnClickListener defaultBtnClickListener) {
         this.defaultBtnClickListener = defaultBtnClickListener;
     }
+
+    @NonNull
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    private final Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<Item> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(itemListAll);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Item item : itemListAll) {
+                    if (item.getName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            itemList.clear();
+            itemList.addAll((Collection<? extends Item>) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     // View lookup cache
     private static class ViewHolder {

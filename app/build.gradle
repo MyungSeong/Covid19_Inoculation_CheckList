@@ -33,8 +33,9 @@ dependencies {
 
     implementation 'com.airbnb.android:lottie:3.7.0'
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
+    implementation 'com.github.GrenderG:Toasty:1.5.0'
 
     implementation project(':library')
 
-    implementation 'com.github.amitshekhariitbhu.Android-Debug-Database:debug-db:v1.0.6'
+    //debugImplementation 'com.github.amitshekhariitbhu.Android-Debug-Database:debug-db:v1.0.6'
 }
