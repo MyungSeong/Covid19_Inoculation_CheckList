@@ -8,9 +8,12 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -81,7 +84,6 @@ public class Util {
         return null;
     }
 
-
     public static String getRemovableSDCardPath(Context context) {
         File[] storages = ContextCompat.getExternalFilesDirs(context, null);
         if (storages.length > 1 && storages[0] != null && storages[1] != null)
@@ -89,7 +91,6 @@ public class Util {
         else
             return "";
     }
-
 
     public static String getDataColumn(Context context, Uri uri,
                                        String selection, String[] selectionArgs) {
@@ -111,24 +112,20 @@ public class Util {
         return null;
     }
 
-
     public static boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri
                 .getAuthority());
     }
-
 
     public static boolean isDownloadsDocument(Uri uri) {
         return "com.android.providers.downloads.documents".equals(uri
                 .getAuthority());
     }
 
-
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri
                 .getAuthority());
     }
-
 
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri
@@ -197,5 +194,56 @@ public class Util {
         }
 
         return null;
+    }
+
+    public abstract static class ThreadTask<T1,T2> implements Runnable {
+        // Argument
+        T1 mArgument;
+
+        // Result
+        T2 mResult;
+
+        // Handle the result
+        public final int WORK_DONE = 0;
+        Handler mResultHandler = new Handler() {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+
+                // Call onPostExecute
+                onPostExecute(mResult);
+            }
+        };
+
+        // Execute
+        final public void execute(final T1 arg) {
+            // Store the argument
+            mArgument = arg;
+
+            // Call onPreExecute
+            onPreExecute();
+
+            // Begin thread work
+            Thread thread = new Thread(this);
+            thread.start();
+        }
+
+        @Override
+        public void run() {
+            // Call doInBackground
+            mResult = doInBackground(mArgument);
+
+            // Notify main thread that the work is done
+            mResultHandler.sendEmptyMessage(WORK_DONE);
+        }
+
+        // onPreExecute
+        protected abstract void onPreExecute();
+
+        // doInBackground
+        protected abstract T2 doInBackground(T1 arg);
+
+        // onPostExecute
+        protected abstract void onPostExecute(T2 result);
     }
 }

@@ -35,4 +35,6 @@ dependencies {
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
 
     implementation project(':library')
+
+    implementation 'com.github.amitshekhariitbhu.Android-Debug-Database:debug-db:v1.0.6'
 }

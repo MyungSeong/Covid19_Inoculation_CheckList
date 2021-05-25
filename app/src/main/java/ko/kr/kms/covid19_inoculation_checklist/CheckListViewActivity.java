@@ -1,6 +1,7 @@
 package ko.kr.kms.covid19_inoculation_checklist;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.amitshekhar.DebugDB;
 import com.ramotion.foldingcell.FoldingCell;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
@@ -38,11 +40,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import ko.kr.kms.covid19_inoculation_checklist.database.DBHelper;
+import ko.kr.kms.covid19_inoculation_checklist.database.Database;
 import ko.kr.kms.covid19_inoculation_checklist.fragment.CenteredTextFragment;
 import ko.kr.kms.covid19_inoculation_checklist.menu.DrawerAdapter;
 import ko.kr.kms.covid19_inoculation_checklist.menu.DrawerItem;
 import ko.kr.kms.covid19_inoculation_checklist.menu.SimpleItem;
 import ko.kr.kms.covid19_inoculation_checklist.menu.SpaceItem;
+
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -59,8 +65,15 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
     private String[] screenTitles;
     private Drawable[] screenIcons;
 
+    private FoldingCellListAdapter foldingCellListAdapter;
+    ListView checkListView;
+
     private SlidingRootNav slidingRootNav;
     private DrawerAdapter slidingRootDrawerAdapter;
+
+    private ArrayList<Item> items;
+
+    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +81,17 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         setContentView(R.layout.activity_check_list_view);
 
         // get our list view
-        ListView theListView = findViewById(R.id.checkListView);
+        checkListView = findViewById(R.id.checkListView);
+
+        Database.getInstance().createDatabase(this);
+        dbHelper = new DBHelper(this);
+        DebugDB.getAddressLog();
 
         // prepare elements to display
-        final ArrayList<Item> items = Item.getTestingList();
+        items = Item.getTestingList();
 
         // add custom btn handler to first list item
-        items.get(0).setRequestBtnClickListener(new View.OnClickListener() {
+        items.get(0).setBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
@@ -82,10 +99,10 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         });
 
         // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
-        final FoldingCellListAdapter adapter = new FoldingCellListAdapter(this, items);
+        foldingCellListAdapter = new FoldingCellListAdapter(this, items);
 
         // add default btn handler for each request btn on each item if custom handler not found
-        adapter.setDefaultRequestBtnClickListener(new View.OnClickListener() {
+        foldingCellListAdapter.setDefaultBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "DEFAULT HANDLER FOR ALL BUTTONS", Toast.LENGTH_SHORT).show();
@@ -93,16 +110,16 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         });
 
         // set elements to adapter
-        theListView.setAdapter(adapter);
+        checkListView.setAdapter(foldingCellListAdapter);
 
         // set on click event listener to list view
-        theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        checkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 // toggle clicked cell state
                 ((FoldingCell) view).toggle(false);
                 // register in adapter that state for selected cell is toggled
-                adapter.registerToggle(pos);
+                foldingCellListAdapter.registerToggle(pos);
             }
         });
 
@@ -173,7 +190,7 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
             switch (requestCode) {
                 case 1:
                     if (data != null) {
-                        getCheckList(data.getData());
+                        setCheckList(data.getData());
                     } else {
                         Toast.makeText(this, "파일 읽기에 실패했습니다", Toast.LENGTH_SHORT).show();
                     }
@@ -188,12 +205,41 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         slidingRootDrawerAdapter.setSelected(POS_UNCONFIRMED_LIST);
     }
 
-    public void getCheckList(Uri pathUri) {
+    private void setCheckList(Uri pathUri) {
         try {
-            Log.d(":: DEBUG", readExcel(pathUri).get(0).getName());
+            new Util.ThreadTask<Uri, ArrayList<Item>>() {
+                @Override
+                protected void onPreExecute() {
+                }
+
+                @Override
+                protected ArrayList<Item> doInBackground(Uri arg) {
+                    return readExcel(arg);
+                }
+
+                @Override
+                protected void onPostExecute(ArrayList<Item> result) {
+                    if (result != null) {
+                        items.clear();
+                        items.addAll(result);
+
+                        dbHelper.insertCheckListToDB(result);
+
+                        for (int i = 0; i < result.size(); i++) {
+                            registerItemButton(i);
+                        }
+
+                        foldingCellListAdapter = new FoldingCellListAdapter(getApplicationContext(), result);
+                        checkListView.setAdapter(foldingCellListAdapter);
+
+                        Toast.makeText(getApplicationContext(), "리스트를 성공적으로 불러왔습니다", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "리스트 불러오기에 실패했습니다", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }.execute(pathUri);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "리스트 불러오기에 실패했습니다", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -236,12 +282,12 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         return ContextCompat.getColor(this, res);
     }
 
-    public ArrayList<Item> readExcel(Uri listUri) {
+    private ArrayList<Item> readExcel(Uri listUri) {
         System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
         System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
         System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
 
-        ArrayList<Item> list = new ArrayList<Item>();
+        ArrayList<Item> itemList = new ArrayList<>();
 
         try {
             File file = Util.getImageFile(this, listUri);
@@ -249,30 +295,125 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
             FileInputStream fileInputStream = new FileInputStream(file);
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
 
-            int rowIndex = 0;
-            int colIndex = 2;
+            //Item item = Item.getInstance();
+            String reservationDate = "";
+            String reservationTime = "";
+            String inoculated = "";
+            String subject = "";
+            String name = "";
+            String registrationNumber = "";
+            String phoneNumber = "";
+            String facilityName = "";
 
-            // 시트 수
-            XSSFSheet sheet = workbook.getSheetAt(0);
-            // 행의 수
-            int rows = sheet.getPhysicalNumberOfRows();
-            for (rowIndex = 0; rowIndex < rows; rowIndex++) {
-                // 행 읽기
-                XSSFRow row = sheet.getRow(rowIndex);
-                XSSFCell cell = row.getCell(2);
+            int totalSheets = workbook.getNumberOfSheets();
 
-                Item item = Item.getInstance();
+            XSSFSheet curSheet;
+            XSSFRow curRow;
+            XSSFCell curCell;
 
-                item.setName(cell.getStringCellValue());
-                Log.d(":: Data", item.toString());
+            Log.d(":: totalSheets", String.valueOf(totalSheets));
 
-                list.add(item);
+            for (int sheetIndex = 0; sheetIndex < totalSheets; sheetIndex++) {
+                curSheet = workbook.getSheetAt(sheetIndex);
+                Log.d(":: curSheet", String.valueOf(sheetIndex));
+
+                int totalCurRow = curSheet.getPhysicalNumberOfRows();
+
+                for (int rowIndex = 0; rowIndex < totalCurRow; rowIndex++) {
+                    if (rowIndex < 2)
+                        continue;
+
+                    curRow = curSheet.getRow(rowIndex);
+
+                    DataFormatter dataFormatter = new DataFormatter();
+                    String value = "";
+
+                    if (curRow.getCell(0) != null) {
+                        int totalCell = curRow.getPhysicalNumberOfCells();
+                        Log.d(":: totalCell", String.valueOf(totalCell));
+
+                        for (int cellIndex = 0; cellIndex < totalCell; cellIndex++) {
+                            curCell = curRow.getCell(cellIndex);
+
+                            if (curCell != null) {
+                                String curValue = dataFormatter.formatCellValue(curCell);
+                                Log.d(":: value", curValue);
+
+                                if (!("".equals(curValue))) {
+                                    value = curValue;
+                                } else {
+                                    value = "";
+                                }
+                            }
+
+                            switch (cellIndex) {
+                                case 0: // 2차 예방접종 예약일
+                                    //item.setReservationDate(value);
+                                    reservationDate = value;
+                                    break;
+
+                                case 1: // 예약 시간
+                                    //item.setReservationTime(value);
+                                    reservationTime = value;
+                                    break;
+
+                                case 2: // 접종 완료
+                                    //item.setInoculated(value);
+                                    inoculated = value;
+                                    break;
+
+                                case 3: // 대상자 구분
+                                    //item.setSubject(value);
+                                    subject = value;
+                                    break;
+
+                                case 4: // 이름
+                                    //item.setName(value);
+                                    name = value;
+                                    break;
+
+                                case 5: // 주민등록번호
+                                    //item.setRegistrationNumber(value);
+                                    registrationNumber = value;
+                                    break;
+
+                                case 6: // 전화번호
+                                    //item.setPhoneNumber(value);
+                                    phoneNumber = value;
+                                    break;
+
+                                case 7: // 노인시설명
+                                    //item.setFacilityName(value);
+                                    facilityName = value;
+                                    break;
+                            }
+                        }
+                    }
+
+                    itemList.add(new Item(reservationDate, reservationTime, inoculated,
+                            subject, name, registrationNumber, phoneNumber, facilityName));
+                }
             }
+
+            if (workbook != null)
+                workbook.close();
+
+            if (fileInputStream != null)
+                fileInputStream.close();
         } catch(IOException e) {
             e.printStackTrace();
         }
 
-        return list;
+        return itemList;
+    }
+
+    private void registerItemButton(int pos) {
+        items.get(pos).setBtnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "이름: " + items.get(pos).getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

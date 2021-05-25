@@ -1,5 +1,6 @@
 package ko.kr.kms.covid19_inoculation_checklist;
 
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -26,12 +27,12 @@ public class Item {
     private String phoneNumber;
     private String facilityName;
 
-    private View.OnClickListener requestBtnClickListener;
+    private View.OnClickListener btnClickListener;
 
     private Item() {
     }
 
-    private Item(String reservationDate, String reservationTime, String inoculated, String subject,
+    public Item(String reservationDate, String reservationTime, String inoculated, String subject,
                 String name, String registrationNumber, String phoneNumber, String facilityName) {
         this.reservationDate = reservationDate;
         this.reservationTime = reservationTime;
@@ -115,12 +116,12 @@ public class Item {
         this.facilityName = facilityName;
     }
 
-    public View.OnClickListener getRequestBtnClickListener() {
-        return requestBtnClickListener;
+    public View.OnClickListener getBtnClickListener() {
+        return btnClickListener;
     }
 
-    public void setRequestBtnClickListener(View.OnClickListener requestBtnClickListener) {
-        this.requestBtnClickListener = requestBtnClickListener;
+    public void setBtnClickListener(View.OnClickListener btnClickListener) {
+        this.btnClickListener = btnClickListener;
     }
 
     /*@Override

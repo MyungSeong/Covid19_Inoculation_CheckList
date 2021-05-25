@@ -16,7 +16,7 @@ import java.util.List;
 
 public class FoldingCellListAdapter extends ArrayAdapter<Item> {
     private HashSet<Integer> unfoldedIndexes = new HashSet<>();
-    private View.OnClickListener defaultRequestBtnClickListener;
+    private View.OnClickListener defaultBtnClickListener;
 
     public FoldingCellListAdapter(Context context, List<Item> objects) {
         super(context, 0, objects);
@@ -50,7 +50,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             viewHolder.registrationNumber = cell.findViewById(R.id.content_reservationNumber);
             viewHolder.phoneNumber = cell.findViewById(R.id.content_phoneNumber);
             viewHolder.facilityName = cell.findViewById(R.id.content_facilityName);
-            viewHolder.contentRequestBtn = cell.findViewById(R.id.content_request_btn);
+            viewHolder.contentBtn = cell.findViewById(R.id.content_btn);
 
             cell.setTag(viewHolder);
         } else {
@@ -83,11 +83,11 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         viewHolder.facilityName.setText(item.getFacilityName());
 
         // set custom btn handler for list item from that item
-        if (item.getRequestBtnClickListener() != null) {
-            viewHolder.contentRequestBtn.setOnClickListener(item.getRequestBtnClickListener());
+        if (item.getBtnClickListener() != null) {
+            viewHolder.contentBtn.setOnClickListener(item.getBtnClickListener());
         } else {
             // (optionally) add "default" handler if no handler found in item
-            viewHolder.contentRequestBtn.setOnClickListener(defaultRequestBtnClickListener);
+            viewHolder.contentBtn.setOnClickListener(defaultBtnClickListener);
         }
 
         return cell;
@@ -109,12 +109,12 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         unfoldedIndexes.add(position);
     }
 
-    public View.OnClickListener getDefaultRequestBtnClickListener() {
-        return defaultRequestBtnClickListener;
+    public View.OnClickListener getDefaultBtnClickListener() {
+        return defaultBtnClickListener;
     }
 
-    public void setDefaultRequestBtnClickListener(View.OnClickListener defaultRequestBtnClickListener) {
-        this.defaultRequestBtnClickListener = defaultRequestBtnClickListener;
+    public void setDefaultBtnClickListener(View.OnClickListener defaultBtnClickListener) {
+        this.defaultBtnClickListener = defaultBtnClickListener;
     }
 
     // View lookup cache
@@ -134,6 +134,6 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         TextView phoneNumber;
         TextView facilityName;
 
-        TextView contentRequestBtn;
+        TextView contentBtn;
     }
 }
