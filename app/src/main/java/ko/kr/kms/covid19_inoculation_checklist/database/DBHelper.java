@@ -176,41 +176,41 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public ContentValues createCheckListValues(Item items) {
+    public ContentValues createCheckListValues(Item item) {
         ContentValues values = new ContentValues();
 
         for (int i = 0; i < ATTRIBUTE_COUNT; i++) {
             switch (i) {
                 case 0:
-                    values.put(CheckListContract.CheckListEntry.RESERVATION_DATE, items.getReservationDate());
+                    values.put(CheckListContract.CheckListEntry.RESERVATION_DATE, item.getReservationDate());
                     break;
 
                 case 1:
-                    values.put(CheckListContract.CheckListEntry.RESERVATION_TIME, items.getReservationTime());
+                    values.put(CheckListContract.CheckListEntry.RESERVATION_TIME, item.getReservationTime());
                     break;
 
                 case 2:
-                    values.put(CheckListContract.CheckListEntry.INOCULATED, items.getInoculated());
+                    values.put(CheckListContract.CheckListEntry.INOCULATED, item.getInoculated());
                     break;
 
                 case 3:
-                    values.put(CheckListContract.CheckListEntry.SUBJECT, items.getSubject());
+                    values.put(CheckListContract.CheckListEntry.SUBJECT, item.getSubject());
                     break;
 
                 case 4:
-                    values.put(CheckListContract.CheckListEntry.NAME, items.getName());
+                    values.put(CheckListContract.CheckListEntry.NAME, item.getName());
                     break;
 
                 case 5:
-                    values.put(CheckListContract.CheckListEntry.REGISTRATION_NUMBER, items.getRegistrationNumber());
+                    values.put(CheckListContract.CheckListEntry.REGISTRATION_NUMBER, item.getRegistrationNumber());
                     break;
 
                 case 6:
-                    values.put(CheckListContract.CheckListEntry.PHONE_NUMBER, items.getPhoneNumber());
+                    values.put(CheckListContract.CheckListEntry.PHONE_NUMBER, item.getPhoneNumber());
                     break;
 
                 case 7:
-                    values.put(CheckListContract.CheckListEntry.FACILITY_NAME, items.getFacilityName());
+                    values.put(CheckListContract.CheckListEntry.FACILITY_NAME, item.getFacilityName());
                     break;
             }
         }

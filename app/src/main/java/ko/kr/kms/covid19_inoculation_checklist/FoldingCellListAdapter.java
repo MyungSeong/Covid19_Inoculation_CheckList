@@ -22,13 +22,13 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
     private View.OnClickListener defaultBtnClickListener;
 
     private ArrayList<Item> itemList;
-    private ArrayList<Item> itemListAll;
+    private ArrayList<Item> itemListOriginal;
 
     public FoldingCellListAdapter(Context context, List<Item> objects) {
         super(context, 0, objects);
 
         itemList = (ArrayList<Item>) objects;
-        itemListAll = new ArrayList<>(objects);
+        itemListOriginal = new ArrayList<>(objects);
     }
 
     @NonNull
@@ -135,6 +135,13 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         this.defaultBtnClickListener = defaultBtnClickListener;
     }
 
+    public void dataSetChanged(ArrayList<Item> items) {
+        itemListOriginal.clear();
+        itemListOriginal.addAll(items);
+
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public Filter getFilter() {
@@ -147,12 +154,13 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             ArrayList<Item> filteredList = new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(itemListAll);
+                filteredList.addAll(itemListOriginal);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                for (Item item : itemListAll) {
-                    if (item.getName().toLowerCase().contains(filterPattern)) {
+                for (Item item : itemListOriginal) {
+                    if (    item.getName().toLowerCase().contains(filterPattern) ||
+                            item.getFacilityName().toLowerCase().contains(filterPattern) ) {
                         filteredList.add(item);
                     }
                 }
@@ -167,7 +175,8 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             itemList.clear();
-            itemList.addAll((Collection<? extends Item>) results.values);
+            itemList.addAll((ArrayList<Item>) results.values);
+
             notifyDataSetChanged();
         }
     };

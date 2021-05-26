@@ -92,7 +92,7 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         items.get(0).setBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toasty.info(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
+                Toasty.info(v.getContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -428,8 +428,7 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
             registerItemButton(i);
         }
 
-        foldingCellListAdapter.notifyDataSetChanged();
-        initSearchView();
+        foldingCellListAdapter.dataSetChanged(items);
     }
 
     private void registerItemButton(int pos) {

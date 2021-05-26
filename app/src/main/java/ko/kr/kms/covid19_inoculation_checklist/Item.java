@@ -168,8 +168,9 @@ public class Item {
      */
     public static ArrayList<Item> getTestingList() {
         ArrayList<Item> items = new ArrayList<>();
-        items.add(new Item("2021-05-23", "오전 10시", "1차", "노인시설", "홍길동", "960504-1******", "010-1234-5678", "실버타운"));
-        items.add(new Item("2021-05-24", "오후 1시", "1차", "노인시설", "김첨지", "970813-2******", "010-2345-6789", "요양원"));
+        /*items.add(new Item("2021-05-23", "오전 10시", "1차", "노인시설", "홍길동", "960504-1******", "010-1234-5678", "실버타운"));
+        items.add(new Item("2021-05-24", "오후 1시", "1차", "노인시설", "김첨지", "970813-2******", "010-2345-6789", "요양원"));*/
+        items.add(new Item());
 
         return items;
     }
