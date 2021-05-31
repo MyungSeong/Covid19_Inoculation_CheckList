@@ -3,7 +3,7 @@ package ko.kr.kms.covid19_inoculation_checklist;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
+import android.text.TextUtils;
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
@@ -85,27 +85,10 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         Database.getInstance().createDatabase(this);
         dbHelper = new DBHelper(this);
 
-        // prepare elements to display
         items = Item.getTestingList();
-
-        // add custom btn handler to first list item
-        items.get(0).setBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toasty.info(v.getContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
         foldingCellListAdapter = new FoldingCellListAdapter(this, items);
-
-        // add default btn handler for each request btn on each item if custom handler not found
-        foldingCellListAdapter.setDefaultBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toasty.info(getApplicationContext(), "DEFAULT HANDLER FOR ALL BUTTONS", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         // set elements to adapter
         checkListView.setAdapter(foldingCellListAdapter);
@@ -177,7 +160,7 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
                 break;
 
             case POS_IMPORT:
-                Util.verifyStoragePermissions(this);
+                Utils.verifyStoragePermissions(this);
 
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -215,7 +198,7 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
 
     private void setCheckList(Uri pathUri) {
         try {
-            new Util.ThreadTask<Uri, ArrayList<Item>>() {
+            new Utils.ThreadTask<Uri, ArrayList<Item>>() {
                 @Override
                 protected void onPreExecute() {
                 }
@@ -297,7 +280,7 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         ArrayList<Item> itemList = new ArrayList<>();
 
         try {
-            File file = Util.getImageFile(this, listUri);
+            File file = Utils.getImageFile(this, listUri);
 
             FileInputStream fileInputStream = new FileInputStream(file);
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
@@ -317,11 +300,8 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
             XSSFRow curRow;
             XSSFCell curCell;
 
-            Log.d(":: totalSheets", String.valueOf(totalSheets));
-
             for (int sheetIndex = 0; sheetIndex < totalSheets; sheetIndex++) {
                 curSheet = workbook.getSheetAt(sheetIndex);
-                Log.d(":: curSheet", String.valueOf(sheetIndex));
 
                 int totalCurRow = curSheet.getPhysicalNumberOfRows();
 
@@ -336,16 +316,14 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
 
                     if (curRow.getCell(0) != null) {
                         int totalCell = curRow.getPhysicalNumberOfCells();
-                        Log.d(":: totalCell", String.valueOf(totalCell));
 
                         for (int cellIndex = 0; cellIndex < totalCell; cellIndex++) {
                             curCell = curRow.getCell(cellIndex);
 
                             if (curCell != null) {
                                 String curValue = dataFormatter.formatCellValue(curCell);
-                                Log.d(":: value", curValue);
 
-                                if (!("".equals(curValue))) {
+                                if (!TextUtils.isEmpty(curValue)) {
                                     value = curValue;
                                 } else {
                                     value = "";
@@ -478,13 +456,27 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
             @Override
             public boolean onQueryTextChange(String newText) {
                 foldingCellListAdapter.getFilter().filter(newText);
-                return false;
+                return true;
             }
         });
     }
 
     @Override
     public void onBackPressed() {
+        if (slidingRootNav.isMenuOpened()) {
+            slidingRootNav.closeMenu();
+
+            return;
+        }
+
+        if (searchView.isIconified()) {
+            searchView.setQuery("", false);
+            searchView.setIconified(false);
+            searchView.clearFocus();
+
+            return;
+        }
+
         if (pressedTime == 0) {
             pressedTime = System.currentTimeMillis();
             Toasty.warning(this, "한번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show();

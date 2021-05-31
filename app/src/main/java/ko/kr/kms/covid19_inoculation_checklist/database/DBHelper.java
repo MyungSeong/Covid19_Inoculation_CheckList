@@ -6,13 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-
 import es.dmoral.toasty.Toasty;
-import ko.kr.kms.covid19_inoculation_checklist.CheckListViewActivity;
 import ko.kr.kms.covid19_inoculation_checklist.Item;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -149,10 +146,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return items;
     }
 
-    public void insertItem(Item items, String table) {
+    public void insertItem(Item item, String table) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        long newRowId = db.insert(table, null, createCheckListValues(items));
+        long newRowId = db.insert(table, null, createCheckListValues(item));
 
         /*if (newRowId != -1)
             Toasty.success(context, "삽입 성공", Toasty.LENGTH_SHORT).show();

@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Objects;
 
-public class Util {
+public class Utils {
 
     public static String getRealPathFromURI(final Context context, final Uri uri) {
         // DocumentProvider

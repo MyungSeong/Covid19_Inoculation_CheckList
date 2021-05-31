@@ -1,6 +1,7 @@
 package ko.kr.kms.covid19_inoculation_checklist;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,7 @@ import androidx.annotation.NonNull;
 
 import com.ramotion.foldingcell.FoldingCell;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class FoldingCellListAdapter extends ArrayAdapter<Item> {
     private HashSet<Integer> unfoldedIndexes = new HashSet<>();
@@ -159,8 +157,21 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
                 for (Item item : itemListOriginal) {
-                    if (    item.getName().toLowerCase().contains(filterPattern) ||
-                            item.getFacilityName().toLowerCase().contains(filterPattern) ) {
+                    String hangulConsonant = HangulUtils.getHangulInitialSound(item.getName());
+
+                    if (TextUtils.isDigitsOnly(filterPattern)) {
+                        if (item.getRegistrationNumber().contains(filterPattern)) {
+                            filteredList.add(item);
+                        }
+                    }
+
+                    if (hangulConsonant.contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+
+                    if (    item.getName().toLowerCase().contains(filterPattern)            ||
+                            item.getFacilityName().toLowerCase().contains(filterPattern)    ||
+                            item.getRegistrationNumber().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }
