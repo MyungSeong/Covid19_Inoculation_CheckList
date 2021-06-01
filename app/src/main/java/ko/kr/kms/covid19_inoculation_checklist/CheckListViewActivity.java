@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.ramotion.foldingcell.FoldingCell;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
@@ -68,6 +69,8 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
     private SlidingRootNav slidingRootNav;
     private DrawerAdapter slidingRootDrawerAdapter;
 
+    private ShimmerRecyclerView shimmerRecycler;
+
     private SearchView searchView;
 
     private ArrayList<Item> items;
@@ -80,10 +83,13 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
         setContentView(R.layout.activity_check_list_view);
 
         checkListView = findViewById(R.id.checkListView);
+        shimmerRecycler = findViewById(R.id.shimmer_recycler_view);
         searchView = findViewById(R.id.searchView);
 
         Database.getInstance().createDatabase(this);
         dbHelper = new DBHelper(this);
+
+        shimmerRecycler.setVisibility(View.GONE);
 
         items = Item.getTestingList();
 
@@ -201,6 +207,7 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
             new Utils.ThreadTask<Uri, ArrayList<Item>>() {
                 @Override
                 protected void onPreExecute() {
+                    shimmerRecycler.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -217,6 +224,8 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
                         dbHelper.insertCheckList(result);
 
                         reloadCheckList(result);
+
+                        shimmerRecycler.setVisibility(View.GONE);
 
                         Toasty.success(getApplicationContext(), "리스트 불러오기 성공", Toast.LENGTH_SHORT).show();
                     } else {
@@ -469,9 +478,9 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
             return;
         }
 
-        if (searchView.isIconified()) {
+        if (!searchView.isIconified()) {
             searchView.setQuery("", false);
-            searchView.setIconified(false);
+            searchView.setIconified(true);
             searchView.clearFocus();
 
             return;

@@ -20,4 +20,6 @@
     <color name="textColorSecondary">#757575</color>
 
     <color name="black_overlay">#66000000</color>
+
+    <color name="demo_dark_transparent">#24000000</color>
 </resources>
