@@ -125,7 +125,9 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         unfoldedIndexes.add(position);
     }
 
-    public void deleteFoldedIndexes() { unfoldedIndexes.clear(); }
+<<<<<<< HEAD
+    public void deleteUnFoldedIndexes() { unfoldedIndexes.clear(); }
+>>>>>>> feature/ndksetup
 
     public View.OnClickListener getDefaultBtnClickListener() {
         return defaultBtnClickListener;
@@ -155,7 +157,9 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
 
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(itemListOriginal);
-                deleteFoldedIndexes();
+<<<<<<< HEAD
+                deleteUnFoldedIndexes();
+>>>>>>> feature/ndksetup
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
