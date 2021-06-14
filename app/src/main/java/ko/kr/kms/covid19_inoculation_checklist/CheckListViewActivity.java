@@ -468,6 +468,14 @@ public class CheckListViewActivity extends AppCompatActivity implements DrawerAd
                 return true;
             }
         });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                foldingCellListAdapter.deleteFoldedIndexes();
+                return false;
+            }
+        });
     }
 
     @Override

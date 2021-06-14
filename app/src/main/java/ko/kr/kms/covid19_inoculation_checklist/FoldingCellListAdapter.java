@@ -125,6 +125,8 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         unfoldedIndexes.add(position);
     }
 
+    public void deleteFoldedIndexes() { unfoldedIndexes.clear(); }
+
     public View.OnClickListener getDefaultBtnClickListener() {
         return defaultBtnClickListener;
     }
@@ -153,6 +155,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
 
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(itemListOriginal);
+                deleteFoldedIndexes();
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
@@ -163,15 +166,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
                         if (item.getRegistrationNumber().contains(filterPattern)) {
                             filteredList.add(item);
                         }
+                    } else {
+                        if (    item.getName().toLowerCase().contains(filterPattern) ||
+                                item.getFacilityName().toLowerCase().contains(filterPattern) ) {
+                            filteredList.add(item);
+                        }
                     }
 
                     if (hangulConsonant.contains(filterPattern)) {
-                        filteredList.add(item);
-                    }
-
-                    if (    item.getName().toLowerCase().contains(filterPattern)            ||
-                            item.getFacilityName().toLowerCase().contains(filterPattern)    ||
-                            item.getRegistrationNumber().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }
